@@ -6,7 +6,6 @@ import config
 import time
 import os
 import requests
-import json
 
 def bot_login():
     print("Logging in ...")
@@ -32,12 +31,10 @@ def run_bot(r, comments_replied_to):
             else:
                 # get weather data from openweathermap
                 api_key = config.openweathermap_api_key
-                weather_in_f = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + place + "&APPID=" + api_key).json()["main"]["temp"]
-                weather_in_c = (float(weather_in_f) - 32) * 5/9
-                weather_in_f = int(weather_in_f)
-                weather_in_c = int(weather_in_c)
+                weather = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + place + "&APPID=" + api_key + "&units=metric").json()["main"]["temp"]
+                weather = int(weather)
 
-                reply = "The temperature in " + place + " is " + str(weather_in_c) + "°C / " + str(weather_in_f) + "°F!\n\n*Source: [OpenWeatherMap](https://openweathermap.org)*"
+                reply = "The temperature in " + place + " is " + str(weather) + "°C\n\n*Source: [OpenWeatherMap](https://openweathermap.org)*"
             comment.reply(reply)
             print("Replied to comment " + comment.id + ": "+ reply)
 
